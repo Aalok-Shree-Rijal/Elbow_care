@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <!-- Mobile viewport: no scaling, cover the whole screen -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+  <title>💪 ElbowCare Work Timer</title>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- NAV: hidden on auth pages, shown by JS -->
+<nav id="nav">
+  <div class="nav-brand">💪 ElbowCare</div>
+  <div class="nav-links">
+    <button class="nav-tab" id="nt-timer"     onclick="go('timer')">    <span class="icon">⏱</span>Timer</button>
+    <button class="nav-tab" id="nt-dashboard" onclick="go('dashboard')"><span class="icon">📊</span>Dashboard</button>
+    <button class="nav-tab" id="nt-exercises" onclick="go('exercises')"><span class="icon">🏃</span>Exercises</button>
+  </div>
+  <div class="user-menu-wrap" id="user-menu-wrap">
+    <button class="user-pill" id="user-pill" onclick="toggleMenu(event)">
+      <span>👤</span><span id="nav-username">—</span><span class="chev">▼</span>
+    </button>
+    <div class="user-drop" id="user-drop">
+      <button class="drop-item" onclick="doExit()">↩ Exit <span class="drop-hint">stay logged in</span></button>
+      <div class="drop-sep"></div>
+      <button class="drop-item danger" onclick="doLogout()">🚪 Logout <span class="drop-hint">clear session</span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- Page content injected here by JS -->
+<div id="app"></div>
+
+<!-- App logic -->
+<script src="app.js"></script>
+</body>
+</html>
