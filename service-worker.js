@@ -1,4 +1,4 @@
-const CACHE_NAME = 'elbowcare-v2';
+const CACHE_NAME = 'elbowcare-v5';
 const urlsToCache = [
   './',
   './index.html',
@@ -15,13 +15,39 @@ const urlsToCache = [
 ];
 
 self.addEventListener('install', event => {
+  console.log('[SW] Installing cache:', CACHE_NAME);
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
+    caches.open(CACHE_NAME).then(cache => {
+      console.log('[SW] Caching files');
+      return cache.addAll(urlsToCache);
+    }).then(() => {
+      console.log('[SW] All files cached successfully');
+    }).catch(err => {
+      console.error('[SW] Cache failed:', err);
+    })
+  );
+});
+
+self.addEventListener('activate', event => {
+  console.log('[SW] Activating new service worker');
+  event.waitUntil(
+    caches.keys().then(keys => Promise.all(
+      keys.filter(key => key !== CACHE_NAME).map(key => {
+        console.log('[SW] Deleting old cache:', key);
+        return caches.delete(key);
+      })
+    ))
   );
 });
 
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request).then(response => response || fetch(event.request))
+    caches.match(event.request).then(response => {
+      if (response) {
+        console.log('[SW] Serving from cache:', event.request.url);
+        return response;
+      }
+      return fetch(event.request);
+    })
   );
 });

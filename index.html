@@ -2,23 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <!-- Mobile viewport: no scaling, cover the whole screen -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <meta name="mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
   <title>💪 ElbowCare Work Timer</title>
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <!-- Stylesheet -->
   <link rel="stylesheet" href="style.css"/>
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" href="icon-192.png">
 </head>
 <body>
 
-<!-- NAV: hidden on auth pages, shown by JS -->
 <nav id="nav">
   <div class="nav-brand">💪 ElbowCare</div>
   <div class="nav-links">
@@ -38,21 +34,17 @@
   </div>
 </nav>
 
-<!-- Page content injected here by JS -->
 <div id="app"></div>
 
-<!-- App logic -->
-    <script src="app.js"></script>
-
-    <!-- PWA Service Worker -->
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/Elbow_care/service-worker.js');
-        });
-      }
-    </script>
-  </body>
-</html>
+<script src="app.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./service-worker.js')
+        .then(reg => console.log('SW registered:', reg.scope))
+        .catch(err => console.log('SW failed:', err));
+    });
+  }
+</script>
 </body>
 </html>

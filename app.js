@@ -529,7 +529,7 @@ function killTimer() {
 /* audio */
 function buzzer() {
   try {
-    const audio = new Audio('buzzer.mp3');
+    const audio = new Audio("./buzzer.mp3");
     audio.play();
   } catch(e) {}
 }
