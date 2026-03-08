@@ -46,9 +46,9 @@ const LS = {
   addSess(u, m)    { const s = this.stats(u); s.t++; s.m += m; s.d++; this.saveStats(u, s); return s; },
   pain(u)          { return JSON.parse(localStorage.getItem('ec_pain_' + u) || '[]'); },
   addPain(u, a)    { const h = this.pain(u); h.push({dt: new Date().toISOString(), a}); localStorage.setItem('ec_pain_' + u, JSON.stringify(h)); },
-  user()           { return sessionStorage.getItem('ec_cu'); },
-  setUser(u)       { sessionStorage.setItem('ec_cu', u); },
-  clearUser()      { sessionStorage.removeItem('ec_cu'); },
+  user()      { return localStorage.getItem('ec_cu'); },
+  setUser(u)  { localStorage.setItem('ec_cu', u); },
+  clearUser() { localStorage.removeItem('ec_cu'); },
 };
 
 /* ── STATE ── */
