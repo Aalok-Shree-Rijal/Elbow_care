@@ -529,15 +529,8 @@ function killTimer() {
 /* audio */
 function buzzer() {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const o = ctx.createOscillator(), g = ctx.createGain();
-    o.connect(g); g.connect(ctx.destination); o.type = 'sine';
-    o.frequency.setValueAtTime(880, ctx.currentTime);
-    o.frequency.setValueAtTime(660, ctx.currentTime + .2);
-    o.frequency.setValueAtTime(880, ctx.currentTime + .4);
-    g.gain.setValueAtTime(.5, ctx.currentTime);
-    g.gain.exponentialRampToValueAtTime(.01, ctx.currentTime + .9);
-    o.start(); o.stop(ctx.currentTime + .9);
+    const audio = new Audio('buzzer.mp3');
+    audio.play();
   } catch(e) {}
 }
 

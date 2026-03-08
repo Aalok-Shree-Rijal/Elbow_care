@@ -11,6 +11,7 @@ const urlsToCache = [
   '/Elbow_care/exercise2.mp4',
   '/Elbow_care/exercise3.mp4',
   '/Elbow_care/exercise4.mp4',
+  '/Elbow_care/buzzer.mp3',
 ];
 
 self.addEventListener('install', event => {
