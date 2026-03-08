@@ -1,4 +1,4 @@
-const CACHE_NAME = 'elbowcare-v1';
+const CACHE_NAME = 'elbowcare-v2';
 const urlsToCache = [
   '/Elbow_care/',
   '/Elbow_care/index.html',
