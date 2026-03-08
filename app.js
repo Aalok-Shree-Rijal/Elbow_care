@@ -20,16 +20,16 @@ const FACTS = [
   Or update the `vid` field below to match your actual filenames.
 */
 const EX = [
-  {vid:"exercise1.mp4", t:"Wrist Extension Stretch", tn:"नाडी विस्तार तन्काउ",
+  {vid:"Elbow_care/exercise1.mp4", t:"Wrist Extension Stretch", tn:"नाडी विस्तार तन्काउ",
    d:"Hold arm out palm-down. Gently bend wrist upward with other hand. Hold 20 seconds.",
    dn:"हात अगाडि पठाउनुहोस् हत्केला तल। अर्को हातले नाडी माथि झुकाउनुहोस्। २० सेकेन्ड राख्नुहोस्।", s:30},
-  {vid:"exercise2.mp4", t:"Wrist Flexion Stretch", tn:"नाडी झुकाव तन्काउ",
+  {vid:"Elbow_care/exercise2.mp4", t:"Wrist Flexion Stretch", tn:"नाडी झुकाव तन्काउ",
    d:"Hold arm out palm-up. Gently bend wrist downward with other hand. Hold 20 seconds.",
    dn:"हात अगाडि पठाउनुहोस् हत्केला माथि। नाडी तल झुकाउनुहोस्। २० सेकेन्ड राख्नुहोस्।", s:30},
-  {vid:"exercise3.mp4", t:"Forearm Rotation", tn:"अग्रभुजा घुमाउने",
+  {vid:"Elbow_care/exercise3.mp4", t:"Forearm Rotation", tn:"अग्रभुजा घुमाउने",
    d:"Elbow at side, bent 90°. Slowly rotate palm up then palm down. Repeat 10 times.",
    dn:"कुहिनो छेउमा ९०° मोड। हत्केला माथि र तल बिस्तारै घुमाउनुहोस्। १० पटक।", s:25},
-  {vid:"exercise4.mp4", t:"Finger Spread & Squeeze", tn:"औंला फिँजाउ र निचोर",
+  {vid:"Elbow_care/exercise4.mp4", t:"Finger Spread & Squeeze", tn:"औंला फिँजाउ र निचोर",
    d:"Spread fingers wide, hold 5 seconds, then gently close into a fist. Repeat 10 times.",
    dn:"औंलाहरू फराकिलो फैलाउनुहोस्, ५ सेकेन्ड, त्यसपछि मुट्ठी बाँध्नुहोस्। १० पटक।", s:20},
 ];
@@ -529,7 +529,7 @@ function killTimer() {
 /* audio */
 function buzzer() {
   try {
-    const audio = new Audio('buzzer.mp3');
+    const audio = new Audio('Elbow_care/buzzer.mp3');
     audio.play();
   } catch(e) {}
 }
