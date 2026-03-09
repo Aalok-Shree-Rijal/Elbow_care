@@ -436,7 +436,7 @@ function cacheMediaThenDashboard() {
   let done = 0;
   const total = files.length;
 
-  caches.open('elbowcare-v5').then(cache => {
+  caches.open('elbowcare-v6').then(cache => {
     cache.keys().then(keys => {
       const cachedUrls = keys.map(r => r.url);
       const toFetch = files.filter(f => !cachedUrls.some(u => u.includes(f)));
