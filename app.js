@@ -406,8 +406,30 @@ function painresp(d = {}) { return `
 function doLogin() {
   const u = v('lu'), p = v('lp');
   if (!u || !p) { go('login', {err:'Please fill in all fields.'}); return; }
-  if (LS.find(u, p)) { LS.setUser(u); go('dashboard'); }
+  if (LS.find(u, p)) { LS.setUser(u); cacheMedia(); go('dashboard'); }
   else go('login', {err:'Wrong username or password.'});
+}
+
+function cacheMedia() {
+  if (!('caches' in window)) return;
+  const files = [
+    './exercise1.mp4',
+    './exercise2.mp4',
+    './exercise3.mp4',
+    './exercise4.mp4',
+    './buzzer.mp3',
+  ];
+  caches.open('elbowcare-v5').then(cache => {
+    files.forEach(file => {
+      cache.match(file).then(cached => {
+        if (!cached) {
+          fetch(file).then(response => {
+            if (response.ok) cache.put(file, response);
+          }).catch(() => {});
+        }
+      });
+    });
+  });
 }
 function doRegister() {
   const u = v('ru'), p = v('rp'), p2 = v('rp2');
@@ -529,7 +551,7 @@ function killTimer() {
 /* audio */
 function buzzer() {
   try {
-    const audio = new Audio("./buzzer.mp3");
+    const audio = new Audio('./buzzer.mp3');
     audio.play();
   } catch(e) {}
 }
