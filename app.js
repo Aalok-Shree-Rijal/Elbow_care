@@ -427,11 +427,11 @@ function doLogin() {
 function cacheMediaThenDashboard() {
   if (!('caches' in window)) { go('dashboard'); return; }
   const files = [
-    './exercise1.mp4',
-    './exercise2.mp4',
-    './exercise3.mp4',
-    './exercise4.mp4',
-    './buzzer.mp3',
+    '/Elbow_care/exercise1.mp4',
+    '/Elbow_care/exercise2.mp4',
+    '/Elbow_care/exercise3.mp4',
+    '/Elbow_care/exercise4.mp4',
+    '/Elbow_care/buzzer.mp3',
   ];
   let done = 0;
   const total = files.length;
@@ -439,7 +439,7 @@ function cacheMediaThenDashboard() {
   caches.open('elbowcare-v5').then(cache => {
     cache.keys().then(keys => {
       const cachedUrls = keys.map(r => r.url);
-      const toFetch = files.filter(f => !cachedUrls.some(u => u.includes(f.replace('./', ''))));
+      const toFetch = files.filter(f => !cachedUrls.some(u => u.includes(f)));
 
       if (toFetch.length === 0) { go('dashboard'); return; }
 
@@ -582,7 +582,7 @@ function killTimer() {
 /* audio */
 function buzzer() {
   try {
-    const audio = new Audio('./buzzer.mp3');
+    const audio = new Audio('/Elbow_care/buzzer.mp3');
     audio.play();
   } catch(e) {}
 }
