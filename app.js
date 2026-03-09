@@ -590,4 +590,4 @@ function buzzer() {
 const fmt = s => `${String(Math.floor(s / 60)).padStart(2,'0')}:${String(s % 60).padStart(2,'0')}`;
 
 /* ── INIT ── */
-(()=>{ const u = LS.user(); if (u) go('dashboard'); else go('intro'); })();
+(()=>{ const u = LS.user(); if (u) { go('setup'); cacheMediaThenDashboard(); } else go('intro'); })();
