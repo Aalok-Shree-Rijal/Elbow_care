@@ -1,4 +1,4 @@
-const CACHE_NAME = 'elbowcare-v5';
+const CACHE_NAME = 'elbowcare-v6';
 const urlsToCache = [
   './',
   './index.html',
@@ -15,39 +15,54 @@ const urlsToCache = [
 ];
 
 self.addEventListener('install', event => {
-  console.log('[SW] Installing cache:', CACHE_NAME);
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      console.log('[SW] Caching files');
-      return cache.addAll(urlsToCache);
-    }).then(() => {
-      console.log('[SW] All files cached successfully');
-    }).catch(err => {
-      console.error('[SW] Cache failed:', err);
-    })
+    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
   );
+  self.skipWaiting();
 });
 
 self.addEventListener('activate', event => {
-  console.log('[SW] Activating new service worker');
   event.waitUntil(
     caches.keys().then(keys => Promise.all(
-      keys.filter(key => key !== CACHE_NAME).map(key => {
-        console.log('[SW] Deleting old cache:', key);
-        return caches.delete(key);
-      })
+      keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
     ))
   );
+  self.clients.claim();
 });
 
 self.addEventListener('fetch', event => {
+  const req = event.request;
+
+  // Handle video range requests for offline playback
+  if (req.headers.get('range')) {
+    event.respondWith(
+      caches.open(CACHE_NAME).then(cache =>
+        cache.match(req.url.replace(self.location.origin, '').split('?')[0]).then(cached => {
+          if (!cached) return fetch(req);
+          return cached.arrayBuffer().then(buffer => {
+            const range = req.headers.get('range');
+            const parts = range.replace(/bytes=/, '').split('-');
+            const start = parseInt(parts[0], 10);
+            const end = parts[1] ? parseInt(parts[1], 10) : buffer.byteLength - 1;
+            const chunk = buffer.slice(start, end + 1);
+            return new Response(chunk, {
+              status: 206,
+              statusText: 'Partial Content',
+              headers: {
+                'Content-Range': `bytes ${start}-${end}/${buffer.byteLength}`,
+                'Content-Length': chunk.byteLength,
+                'Content-Type': cached.headers.get('Content-Type') || 'video/mp4',
+              }
+            });
+          });
+        })
+      )
+    );
+    return;
+  }
+
+  // Normal requests
   event.respondWith(
-    caches.match(event.request).then(response => {
-      if (response) {
-        console.log('[SW] Serving from cache:', event.request.url);
-        return response;
-      }
-      return fetch(event.request);
-    })
+    caches.match(event.request).then(response => response || fetch(event.request))
   );
 });
