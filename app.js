@@ -317,7 +317,7 @@ function explayer() {
   <div class="ex-player-title-np">${e.tn}</div>
 
   <div class="ex-video-wrap" id="vid-wrap-${exI}">
-    <video id="ex-vid" src="${e.vid}" playsinline controls preload="metadata" muted
+    <video id="ex-vid" src="/Elbow_care/${e.vid}" playsinline controls preload="metadata" muted
       onerror="showVidPlaceholder(${exI},'${e.vid}')"></video>
   </div>
 
