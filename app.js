@@ -93,7 +93,7 @@ function go(pg, d = {}) {
 /* ── PAGE RENDERER ── */
 function render(pg, d = {}) {
   const fns = {
-    intro, login, register, dashboard, timer, exercises, rest,
+    intro, login, register, dashboard, timer, exercises, rest, setup,
     'ex-prompt': exprompt, 'ex-player': explayer, 'ex-therapy': extherapy,
     fact, pain, 'pain-resp': painresp,
   };
@@ -119,6 +119,20 @@ function intro() { return `
   <div class="intro-btns">
     <button class="btn bp big full" onclick="go('login')">Login <span class="np-s">लगिन</span></button>
     <button class="btn bs big full" onclick="go('register')">Register <span class="np-s">दर्ता</span></button>
+  </div>
+</div>`; }
+
+function setup() { return `
+<div class="intro-wrap" style="justify-content:center;min-height:80vh;">
+  <div style="text-align:center;">
+    <span class="logo-emoji">💪</span>
+    <h2 style="font-family:'Fraunces',serif;color:var(--green);margin:.5rem 0;">Setting up your app</h2>
+    <div style="font-size:.85rem;color:var(--np);margin-bottom:1.5rem;">Downloading exercises for offline use…<br>एकपटक डाउनलोड गरिँदैछ…</div>
+    <div style="background:#e8f5e9;border-radius:99px;height:12px;width:260px;margin:0 auto 1rem;">
+      <div id="setup-bar" style="background:var(--green);height:12px;border-radius:99px;width:0%;transition:width .4s;"></div>
+    </div>
+    <div id="setup-pct" style="font-size:1rem;font-weight:600;color:var(--green);">0%</div>
+    <div style="font-size:.75rem;color:var(--mid);margin-top:.5rem;">This only happens once ✨</div>
   </div>
 </div>`; }
 
@@ -406,12 +420,12 @@ function painresp(d = {}) { return `
 function doLogin() {
   const u = v('lu'), p = v('lp');
   if (!u || !p) { go('login', {err:'Please fill in all fields.'}); return; }
-  if (LS.find(u, p)) { LS.setUser(u); cacheMedia(); go('dashboard'); }
+  if (LS.find(u, p)) { LS.setUser(u); go('setup'); cacheMediaThenDashboard(); }
   else go('login', {err:'Wrong username or password.'});
 }
 
-function cacheMedia() {
-  if (!('caches' in window)) return;
+function cacheMediaThenDashboard() {
+  if (!('caches' in window)) { go('dashboard'); return; }
   const files = [
     './exercise1.mp4',
     './exercise2.mp4',
@@ -419,14 +433,31 @@ function cacheMedia() {
     './exercise4.mp4',
     './buzzer.mp3',
   ];
+  let done = 0;
+  const total = files.length;
+
   caches.open('elbowcare-v5').then(cache => {
-    files.forEach(file => {
-      cache.match(file).then(cached => {
-        if (!cached) {
-          fetch(file).then(response => {
-            if (response.ok) cache.put(file, response);
-          }).catch(() => {});
-        }
+    cache.keys().then(keys => {
+      const cachedUrls = keys.map(r => r.url);
+      const toFetch = files.filter(f => !cachedUrls.some(u => u.includes(f.replace('./', ''))));
+
+      if (toFetch.length === 0) { go('dashboard'); return; }
+
+      let fetched = 0;
+      toFetch.forEach(file => {
+        fetch(file).then(response => {
+          if (response.ok) cache.put(file, response.clone());
+        }).catch(() => {}).finally(() => {
+          fetched++;
+          const pct = Math.round(((files.length - toFetch.length + fetched) / total) * 100);
+          const bar = document.getElementById('setup-bar');
+          const label = document.getElementById('setup-pct');
+          if (bar) bar.style.width = pct + '%';
+          if (label) label.textContent = pct + '%';
+          if (fetched >= toFetch.length) {
+            setTimeout(() => go('dashboard'), 500);
+          }
+        });
       });
     });
   });
